@@ -1,11 +1,14 @@
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
 int main() {
-    // Phase 1, Step C: Variable to track the customer's name
     string customerName;
+    double totalAmount = 0.0;
+    string itemsOrdered = "";
+    int menuChoice = 0;
 
     cout << "=========================================\n";
     cout << "        WELCOME TO THE RESTAURANT        \n";
@@ -15,8 +18,6 @@ int main() {
     cout << "Enter customer name: ";
     getline(cin, customerName);
 
-    int menuChoice = 0;
-
     // Phase 1, Step A: Loop menu choices until Checkout (Option 5) is selected
     while (menuChoice != 5) {
         cout << "\n--- MENU ---\n";
@@ -24,11 +25,11 @@ int main() {
         cout << "2. Pizza       - $10.00\n";
         cout << "3. Fries       - $3.50\n";
         cout << "4. Soda        - $2.00\n";
-        cout << "5. Checkout\n"; // Phase 1, Step A: Checkout option
+        cout << "5. Checkout\n";
         cout << "Enter choice (1-5): ";
         cin >> menuChoice;
 
-        // Phase 1, Step B: Input validation (handles non-integer and out-of-range input)
+        // Phase 1, Step B: Input validation
         if (cin.fail() || menuChoice < 1 || menuChoice > 5) {
             cin.clear();
             cin.ignore(1000, '\n');
@@ -36,18 +37,26 @@ int main() {
             continue;
         }
 
-        // Process valid selection
+        // Process choices & accumulate items/total for the receipt
         switch (menuChoice) {
             case 1:
+                itemsOrdered += "Burger - $8.50\n";
+                totalAmount += 8.50;
                 cout << "Added Burger to order.\n";
                 break;
             case 2:
+                itemsOrdered += "Pizza - $10.00\n";
+                totalAmount += 10.00;
                 cout << "Added Pizza to order.\n";
                 break;
             case 3:
+                itemsOrdered += "Fries - $3.50\n";
+                totalAmount += 3.50;
                 cout << "Added Fries to order.\n";
                 break;
             case 4:
+                itemsOrdered += "Soda - $2.00\n";
+                totalAmount += 2.00;
                 cout << "Added Soda to order.\n";
                 break;
             case 5:
@@ -56,12 +65,22 @@ int main() {
         }
     }
 
-    // Phase 1, Step C: Display customer's name at top of receipt header
+    // Phase 1 Receipt Output with items and total
     cout << "\n=========================================\n";
     cout << "                 RECEIPT                 \n";
     cout << "=========================================\n";
     cout << "Customer Name: " << customerName << "\n";
     cout << "-----------------------------------------\n";
+    cout << "Items Ordered:\n";
+    if (itemsOrdered.empty()) {
+        cout << "No items ordered.\n";
+    } else {
+        cout << itemsOrdered;
+    }
+    cout << "-----------------------------------------\n";
+    cout << fixed << setprecision(2);
+    cout << "Total Amount: $" << totalAmount << "\n";
+    cout << "=========================================\n";
 
     return 0;
 }

@@ -1,85 +1,114 @@
 #include <iostream>
-#include <string>
 #include <iomanip>
+#include <string>
 
 using namespace std;
 
 int main() {
-    string customerName;
-    double totalAmount = 0.0;
-    string itemsOrdered = "";
-    int menuChoice = 0;
+    // Phase 2: Daily summary tracking variables
+    double grandTotalSales = 0.0;
+    int totalCustomers = 0;
+    char nextCustomerChoice;
 
-    cout << "=========================================\n";
-    cout << "        WELCOME TO THE RESTAURANT        \n";
-    cout << "=========================================\n";
+    // Phase 2: Outer loop to handle multiple customers throughout the day
+    
 
-    // Phase 1, Step C: Capture customer name
-    cout << "Enter customer name: ";
-    getline(cin, customerName);
+        cout << "=========================================\n";
+        cout << "        WELCOME TO THE RESTAURANT        \n";
+        cout << "=========================================\n";
 
-    // Phase 1, Step A: Loop menu choices until Checkout (Option 5) is selected
-    while (menuChoice != 5) {
-        cout << "\n--- MENU ---\n";
-        cout << "1. Burger      - $8.50\n";
-        cout << "2. Pizza       - $10.00\n";
-        cout << "3. Fries       - $3.50\n";
-        cout << "4. Soda        - $2.00\n";
-        cout << "5. Checkout\n";
-        cout << "Enter choice (1-5): ";
-        cin >> menuChoice;
+        do {
+        string customerName;
+        cout << "Enter customer name: ";
+        cin >> ws; // Clears leftover whitespace before getline
+        getline(cin, customerName);
 
-        // Phase 1, Step B: Input validation
-        if (cin.fail() || menuChoice < 1 || menuChoice > 5) {
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cout << "Invalid selection! Please enter a valid menu option (1-5).\n";
-            continue;
+        // Phase 2: String accumulator and running order total
+        string receiptAccumulator = "";
+        double orderTotal = 0.0;
+        int menuChoice = 0;
+
+        // Phase 1: Inner ordering loop
+        while (menuChoice != 5) {
+            cout << "\n--- MENU ---\n";
+            cout << "1. Burger      - $8.50\n";
+            cout << "2. Pizza       - $10.00\n";
+            cout << "3. Fries       - $3.50\n";
+            cout << "4. Soda        - $2.00\n";
+            cout << "5. Checkout\n";
+            cout << "Enter choice (1-5): ";
+            cin >> menuChoice;
+
+            // Input validation
+            if (cin.fail() || menuChoice < 1 || menuChoice > 5) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Invalid selection! Please enter a number between 1 and 5.\n";
+                continue;
+            }
+
+            string itemName = "";
+            double itemPrice = 0.0;
+
+            switch (menuChoice) {
+                case 1: itemName = "Burger"; itemPrice = 8.50; break;
+                case 2: itemName = "Pizza";  itemPrice = 10.00; break;
+                case 3: itemName = "Fries";  itemPrice = 3.50; break;
+                case 4: itemName = "Soda";   itemPrice = 2.00; break;
+                case 5: cout << "\nProcessing checkout...\n"; break;
+            }
+
+            // Phase 2: Convert numerical prices with to_string() and build string accumulator
+            if (menuChoice >= 1 && menuChoice <= 4) {
+                orderTotal += itemPrice;
+
+                // Format price string to two decimal places
+                string priceStr = to_string(itemPrice);
+                priceStr = priceStr.substr(0, priceStr.find(".") + 3);
+
+                // Append item line with trailing newline
+                receiptAccumulator += itemName + " - $" + priceStr + "\n";
+                cout << "Added " << itemName << " to order.\n";
+            }
         }
 
-        // Process choices & accumulate items/total for the receipt
-        switch (menuChoice) {
-            case 1:
-                itemsOrdered += "Burger - $8.50\n";
-                totalAmount += 8.50;
-                cout << "Added Burger to order.\n";
-                break;
-            case 2:
-                itemsOrdered += "Pizza - $10.00\n";
-                totalAmount += 10.00;
-                cout << "Added Pizza to order.\n";
-                break;
-            case 3:
-                itemsOrdered += "Fries - $3.50\n";
-                totalAmount += 3.50;
-                cout << "Added Fries to order.\n";
-                break;
-            case 4:
-                itemsOrdered += "Soda - $2.00\n";
-                totalAmount += 2.00;
-                cout << "Added Soda to order.\n";
-                break;
-            case 5:
-                cout << "\nProceeding to Checkout...\n";
-                break;
-        }
-    }
+        // Update day-level statistics
+        totalCustomers++;
+        grandTotalSales += orderTotal;
 
-    // Phase 1 Receipt Output with items and total
+        // Phase 2: Refactored receipt printing using the string accumulator
+        cout << "\n=========================================\n";
+        cout << "                 RECEIPT                 \n";
+        cout << "=========================================\n";
+        cout << "Customer Name: " << customerName << "\n";
+        cout << "-----------------------------------------\n";
+        cout << "Items Ordered:\n";
+        cout << receiptAccumulator;
+        cout << "-----------------------------------------\n";
+        cout << fixed << setprecision(2);
+        cout << "Total Order Amount: $" << orderTotal << "\n";
+
+        // Phase 2: Loyalty points calculation ($3 spent = 1 point)
+        int loyaltyPoints = static_cast<int>(orderTotal / 3.0);
+        cout << "Loyalty Points:     ";
+        for (int i = 0; i < loyaltyPoints; ++i) {
+            cout << "*";
+        }
+        cout << "\n=========================================\n\n";
+
+        // Phase 2: Multi-customer prompt
+        cout << "Is there another customer? (y/n): ";
+        cin >> nextCustomerChoice;
+
+    } while (nextCustomerChoice == 'y' || nextCustomerChoice == 'Y');
+
+    // Phase 2: Daily sales summary report printed at the end of the day
     cout << "\n=========================================\n";
-    cout << "                 RECEIPT                 \n";
+    cout << "           DAILY SALES SUMMARY           \n";
     cout << "=========================================\n";
-    cout << "Customer Name: " << customerName << "\n";
-    cout << "-----------------------------------------\n";
-    cout << "Items Ordered:\n";
-    if (itemsOrdered.empty()) {
-        cout << "No items ordered.\n";
-    } else {
-        cout << itemsOrdered;
-    }
-    cout << "-----------------------------------------\n";
+    cout << "Total Customers Served: " << totalCustomers << "\n";
     cout << fixed << setprecision(2);
-    cout << "Total Amount: $" << totalAmount << "\n";
+    cout << "Total Sales for the Day: $" << grandTotalSales << "\n";
     cout << "=========================================\n";
 
     return 0;

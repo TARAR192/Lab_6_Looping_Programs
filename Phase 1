@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    // Phase 1, Step C: Variable to track the customer's name
+    string customerName;
+
+    cout << "=========================================\n";
+    cout << "        WELCOME TO THE RESTAURANT        \n";
+    cout << "=========================================\n";
+
+    // Phase 1, Step C: Capture customer name
+    cout << "Enter customer name: ";
+    getline(cin, customerName);
+
+    int menuChoice = 0;
+
+    // Phase 1, Step A: Loop menu choices until Checkout (Option 5) is selected
+    while (menuChoice != 5) {
+        cout << "\n--- MENU ---\n";
+        cout << "1. Burger      - $8.50\n";
+        cout << "2. Pizza       - $10.00\n";
+        cout << "3. Fries       - $3.50\n";
+        cout << "4. Soda        - $2.00\n";
+        cout << "5. Checkout\n"; // Phase 1, Step A: Checkout option
+        cout << "Enter choice (1-5): ";
+        cin >> menuChoice;
+
+        // Phase 1, Step B: Input validation (handles non-integer and out-of-range input)
+        if (cin.fail() || menuChoice < 1 || menuChoice > 5) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Invalid selection! Please enter a valid menu option (1-5).\n";
+            continue;
+        }
+
+        // Process valid selection
+        switch (menuChoice) {
+            case 1:
+                cout << "Added Burger to order.\n";
+                break;
+            case 2:
+                cout << "Added Pizza to order.\n";
+                break;
+            case 3:
+                cout << "Added Fries to order.\n";
+                break;
+            case 4:
+                cout << "Added Soda to order.\n";
+                break;
+            case 5:
+                cout << "\nProceeding to Checkout...\n";
+                break;
+        }
+    }
+
+    // Phase 1, Step C: Display customer's name at top of receipt header
+    cout << "\n=========================================\n";
+    cout << "                 RECEIPT                 \n";
+    cout << "=========================================\n";
+    cout << "Customer Name: " << customerName << "\n";
+    cout << "-----------------------------------------\n";
+
+    return 0;
+}
